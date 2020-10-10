@@ -1,0 +1,123 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Trying to help john realize the ntier architecture",
+    "Parameters": {
+        "vpcname": {
+            "Description": "Enter the name of your vpc",
+            "Type": "String",
+            "Default": "fromcf"
+        },
+        "vpccidrrage": {
+            "Description": "Enter the cidr range of vpc",
+            "Type": "String",
+            "Default": "192.168.0.0/16"
+        },
+        "websubnetrange": {
+            "Description": "Enter the cidr range of web subnet",
+            "Type": "String",
+            "Default": "192.168.0.0/24"
+        },
+        "appsubnetrange": {
+            "Description": "Enter the cidr range of app subnet",
+            "Type": "String",
+            "Default": "192.168.1.0/24"
+        },
+        "dbsubnetrange": {
+            "Description": "Enter the cidr range of db subnet",
+            "Type": "String",
+            "Default": "192.168.2.0/24"
+        },
+        "websubnetaz": {
+            "Description": "Select the Web subnet Az",
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+        },
+        "appsubnetaz": {
+            "Description": "Select the app subnet Az",
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+        },
+        "dbsubnetaz": {
+            "Description": "Select the db subnet Az",
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+        }
+    },
+    "Resources": {
+        "ntiervpc": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "CidrBlock": {
+                    "Ref": "vpccidrrage"
+                },
+                "EnableDnsSupport": true,
+                "EnableDnsHostnames": true,
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Ref": "vpcname"
+                        }
+                    }
+                ]
+            }
+        },
+        "websubnet": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": {
+                    "Ref": "websubnetaz"
+                },
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "CidrBlock": {
+                    "Ref": "websubnetrange"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "fromcf-web1"
+                    }
+                ]
+            }
+        },
+        "appsubnet": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": {
+                    "Ref": "appsubnetaz"
+                },
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "CidrBlock": {
+                    "Ref": "appsubnetrange"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "fromcf-app1"
+                    }
+                ]
+            }
+        },
+        "dbsubnet": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": {
+                    "Ref": "dbsubnetaz"
+                },
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "CidrBlock": {
+                    "Ref": "dbsubnetrange"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "fromcf-db1"
+                    }
+                ]
+            }
+        }
+    }
+}

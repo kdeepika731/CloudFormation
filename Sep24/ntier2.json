@@ -1,0 +1,210 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Trying to help john realize the ntier architecture",
+    "Parameters": {
+        "vpcname": {
+            "Description": "Enter the name of your vpc",
+            "Type": "String",
+            "Default": "fromcf"
+        },
+        "vpccidrrage": {
+            "Description": "Enter the cidr range of vpc",
+            "Type": "String",
+            "Default": "192.168.0.0/16"
+        },
+        "websubnetrange": {
+            "Description": "Enter the cidr range of web subnet",
+            "Type": "String",
+            "Default": "192.168.0.0/24"
+        },
+        "appsubnetrange": {
+            "Description": "Enter the cidr range of app subnet",
+            "Type": "String",
+            "Default": "192.168.1.0/24"
+        },
+        "dbsubnetrange": {
+            "Description": "Enter the cidr range of db subnet",
+            "Type": "String",
+            "Default": "192.168.2.0/24"
+        },
+        "websubnetaz": {
+            "Description": "Select the Web subnet Az",
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+        },
+        "appsubnetaz": {
+            "Description": "Select the app subnet Az",
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+        },
+        "dbsubnetaz": {
+            "Description": "Select the db subnet Az",
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+        },
+        "websubnetharange": {
+            "Description": "Enter the subnet range for web ha subnet",
+            "Type": "String",
+            "Default": "192.168.3.0/24"
+        },
+        "websubnethaaz": {
+            "Description": "Select the Web subnet HA Az",
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+        },
+        "appsubnetharange": {
+            "Description": "Enter the subnet range for app ha subnet",
+            "Type": "String",
+            "Default": "192.168.4.0/24"
+        },
+        "appsubnethaaz": {
+            "Description": "Select the app subnet HA Az",
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+        },
+        "dbsubnetharange": {
+            "Description": "Enter the subnet range for db ha subnet",
+            "Type": "String",
+            "Default": "192.168.5.0/24"
+        },
+        "dbsubnethaaz": {
+            "Description": "Select the db subnet HA Az",
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+        }
+    },
+    "Resources": {
+        "ntiervpc": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "CidrBlock": {
+                    "Ref": "vpccidrrage"
+                },
+                "EnableDnsSupport": true,
+                "EnableDnsHostnames": true,
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Ref": "vpcname"
+                        }
+                    }
+                ]
+            }
+        },
+        "websubnet": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": {
+                    "Ref": "websubnetaz"
+                },
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "CidrBlock": {
+                    "Ref": "websubnetrange"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "fromcf-web1"
+                    }
+                ]
+            }
+        },
+        "appsubnet": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": {
+                    "Ref": "appsubnetaz"
+                },
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "CidrBlock": {
+                    "Ref": "appsubnetrange"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "fromcf-app1"
+                    }
+                ]
+            }
+        },
+        "dbsubnet": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": {
+                    "Ref": "dbsubnetaz"
+                },
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "CidrBlock": {
+                    "Ref": "dbsubnetrange"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "fromcf-db1"
+                    }
+                ]
+            }
+        },
+        "websubnetha": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": {
+                    "Ref": "websubnethaaz"
+                },
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "CidrBlock": {
+                    "Ref": "websubnetrange"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "fromcf-web2"
+                    }
+                ]
+            }
+        },
+        "appsubnetha": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": {
+                    "Ref": "appsubnethaaz"
+                },
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "CidrBlock": {
+                    "Ref": "appsubnetharange"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "fromcf-app2"
+                    }
+                ]
+            }
+        },
+        "dbsubnetha": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": {
+                    "Ref": "dbsubnethaaz"
+                },
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "CidrBlock": {
+                    "Ref": "dbsubnetharange"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "fromcf-db2"
+                    }
+                ]
+            }
+        }
+    }
+}
